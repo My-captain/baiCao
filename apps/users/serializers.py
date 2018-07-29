@@ -101,7 +101,6 @@ class UserRegSerializer(serializers.ModelSerializer):
         verify_records = VerifyCode.objects.filter(mobile=self.initial_data["mobile"]).order_by("-add_time")
         if verify_records:
             last_record = verify_records[0]
-            print(last_record)
 
             five_minutes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
             if five_minutes_ago > last_record.add_time:
