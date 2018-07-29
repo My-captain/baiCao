@@ -52,6 +52,6 @@ def aliyun_send_sms(code, mobile):
     # params = "{\"code\":\"12345\"}"
     response_dict = send_sms(__business_id, mobile, settings.SMS_SIGNATURE, settings.SMS_TEMPLATE_CODE, params)
     response_dict = str(response_dict, encoding='utf-8')
-    print("发送回执：" + response_dict + "\n发送内容:" + "code:" + code + "\tmobile" + mobile)
+    print("aliyun_sms_result:\t" + response_dict + "\ncontent_sended:" + "code:" + code + "\tmobile" + mobile)
     response_dict = json.loads(response_dict)
     return response_dict
