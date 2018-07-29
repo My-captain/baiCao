@@ -7,17 +7,17 @@ from product.models import Goods
 
 
 class Generation(models.Model):
-    customer = models.ForeignKey(UserProfile, verbose_name=u"顾客", on_delete=models.CASCADE)
-    staff = models.ForeignKey(Staff, verbose_name=u"代种员工", on_delete=models.CASCADE)
-    begin = models.DateField(verbose_name=u"开始时间", null=False)
-    end = models.DateField(verbose_name=u"结束时间", null=False)
+    customer = models.ForeignKey(UserProfile, verbose_name=u"顾客", on_delete=models.CASCADE, help_text="顾客id")
+    staff = models.ForeignKey(Staff, verbose_name=u"代种员工", on_delete=models.CASCADE, help_text="员工id")
+    begin = models.DateField(verbose_name=u"开始时间", null=False, help_text="开始时间")
+    end = models.DateField(verbose_name=u"结束时间", null=False, help_text="结束时间")
     deliver_type = models.CharField(
         max_length=10, verbose_name=u"快递方式",
         choices=(
             ("client", "客户负责"),
             ("server", "服务员上门")),
         default="client"
-    )
+        , help_text="快递方式")
     plant_type = models.CharField(
         max_length=10, verbose_name=u"盆栽类型",
         choices=(
@@ -26,10 +26,10 @@ class Generation(models.Model):
             ("large", "大型")
         ),
         default="small"
-    )
-    address = models.CharField(max_length=50, verbose_name=u"地址", null=False)
-    price = models.FloatField(max_length=20, verbose_name=u"代种价格", null=False)
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+        , help_text="盆栽类型")
+    address = models.CharField(max_length=50, verbose_name=u"地址", null=False, help_text="地址")
+    price = models.FloatField(max_length=20, verbose_name=u"代种价格", null=False, help_text="价格")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间", help_text="添加时间")
 
     class Meta:
         verbose_name = "代种信息"
@@ -41,10 +41,10 @@ class Generation(models.Model):
 
 
 class Purchase(models.Model):
-    customer = models.ForeignKey(UserProfile, verbose_name=u"用户", on_delete=models.CASCADE)
-    goods = models.ForeignKey(Goods, verbose_name=u"商品", on_delete=models.CASCADE)
-    count = models.IntegerField(verbose_name=u"数量", null=False)
-    total_money = models.FloatField(max_length=100, verbose_name=u"金额", null=False)
+    customer = models.ForeignKey(UserProfile, verbose_name=u"用户", on_delete=models.CASCADE, help_text="用户id")
+    goods = models.ForeignKey(Goods, verbose_name=u"商品", on_delete=models.CASCADE, help_text="商品id")
+    count = models.IntegerField(verbose_name=u"数量", null=False, help_text="数量")
+    total_money = models.FloatField(max_length=100, verbose_name=u"金额", null=False, help_text="总金额")
     state = models.IntegerField(
         verbose_name=u"购买状态",
         choices=(
@@ -53,10 +53,10 @@ class Purchase(models.Model):
             (3, "运输中"),
             (4, "已到站"),
             (5, "已提货")
-        ), default=1)
-    address = models.CharField(max_length=50, verbose_name=u"收货地址", null=False)
-    mobile = models.CharField(max_length=11, verbose_name=u"联系电话", null=False)
-    add_time = models.DateTimeField(verbose_name=u"添加时间", default=datetime.now)
+        ), default=1, help_text="货物状态")
+    address = models.CharField(max_length=50, verbose_name=u"收货地址", null=False, help_text="地址")
+    mobile = models.CharField(max_length=11, verbose_name=u"联系电话", null=False, help_text="电话")
+    add_time = models.DateTimeField(verbose_name=u"添加时间", default=datetime.now, help_text="添加时间")
 
     class Meta:
         verbose_name = "购买信息"
@@ -68,9 +68,9 @@ class Purchase(models.Model):
 
 
 class Favorite(models.Model):
-    customer = models.ForeignKey(UserProfile, verbose_name=u"用户", on_delete=models.CASCADE)
-    good = models.ForeignKey(Goods, verbose_name=u"商品", on_delete=models.CASCADE)
-    add_time = models.DateTimeField(verbose_name=u"添加时间", default=datetime.now)
+    customer = models.ForeignKey(UserProfile, verbose_name=u"用户", on_delete=models.CASCADE, help_text="用户id")
+    good = models.ForeignKey(Goods, verbose_name=u"商品", on_delete=models.CASCADE, help_text="商品id")
+    add_time = models.DateTimeField(verbose_name=u"添加时间", default=datetime.now, help_text="添加时间")
 
     class Meta:
         unique_together = ('customer', 'good')

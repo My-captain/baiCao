@@ -10,13 +10,13 @@ from django.contrib.auth.models import AbstractUser
 
 
 class UserProfile(AbstractUser):
-    gender = models.CharField(max_length=2, null=True, choices=(("M", "男"), ("F", "女")))
-    mobile = models.CharField(max_length=12, null=False, verbose_name=u"电话", unique=True)
-    address = models.CharField(max_length=50, verbose_name=u"地址")
-    email = models.EmailField(verbose_name=u"邮箱", null=True)
-    image = models.ImageField(upload_to="image/user/%Y/%m", verbose_name=u"头像")
-    wallet = models.FloatField(default=100, verbose_name=u"钱包", null=False)
-    add_time = models.DateField(default=timezone.now, verbose_name=u"添加时间")
+    gender = models.CharField(max_length=2, null=True, choices=(("M", "男"), ("F", "女")), help_text="性别")
+    mobile = models.CharField(max_length=12, null=False, verbose_name=u"电话", unique=True, help_text="电话")
+    address = models.CharField(max_length=50, verbose_name=u"地址", help_text="地址")
+    email = models.EmailField(verbose_name=u"邮箱", null=True, help_text="邮箱")
+    image = models.ImageField(upload_to="image/user/%Y/%m", verbose_name=u"头像", help_text="头像")
+    wallet = models.FloatField(default=100, verbose_name=u"钱包", null=False, help_text="钱包")
+    add_time = models.DateField(default=timezone.now, verbose_name=u"添加时间", help_text="添加时间")
 
     class Meta:
         verbose_name = "用户信息"
@@ -31,9 +31,9 @@ class VerifyCode(models.Model):
     """
     短信验证码
     """
-    code = models.CharField(max_length=10, verbose_name="验证码")
-    mobile = models.CharField(max_length=11, verbose_name="电话")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
+    code = models.CharField(max_length=10, verbose_name="验证码", help_text="验证码")
+    mobile = models.CharField(max_length=11, verbose_name="电话", help_text="电话")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间", help_text="添加时间")
 
     class Meta:
         verbose_name = "短信验证码"
@@ -46,9 +46,9 @@ class VerifyCode(models.Model):
 
 class Base(models.Model):
     # 基地
-    name = models.CharField(max_length=50, verbose_name=u"基地名称", null=False)
-    address = models.CharField(max_length=50, verbose_name=u"基地地址", null=False)
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    name = models.CharField(max_length=50, verbose_name=u"基地名称", null=False, help_text="基地名称")
+    address = models.CharField(max_length=50, verbose_name=u"基地地址", null=False, help_text="基地地址")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间", help_text="添加时间")
 
     class Meta:
         verbose_name = "基地信息"
@@ -61,12 +61,12 @@ class Base(models.Model):
 
 class Staff(models.Model):
     # 员工
-    name = models.CharField(max_length=50, verbose_name=u"员工姓名", null=False)
-    mobile = models.CharField(max_length=12, verbose_name=u"员工电话", null=False)
-    salary = models.FloatField(max_length=20, default=0, verbose_name=u"工资")
-    seniority = models.IntegerField(verbose_name=u"工龄", null=True)
-    base = models.ForeignKey(Base, verbose_name=u"基地地址", on_delete=models.CASCADE)
-    add_time = models.DateField(default=timezone.now, verbose_name=u"添加时间")
+    name = models.CharField(max_length=50, verbose_name=u"员工姓名", null=False, help_text="员工姓名")
+    mobile = models.CharField(max_length=12, verbose_name=u"员工电话", null=False, help_text="员工电话")
+    salary = models.FloatField(max_length=20, default=0, verbose_name=u"工资", help_text="员工工资")
+    seniority = models.IntegerField(verbose_name=u"工龄", null=True, help_text="工龄")
+    base = models.ForeignKey(Base, verbose_name=u"基地地址", on_delete=models.CASCADE, help_text="所属基地")
+    add_time = models.DateField(default=timezone.now, verbose_name=u"添加时间", help_text="添加时间")
 
     class Meta:
         verbose_name = "员工信息"
@@ -78,11 +78,11 @@ class Staff(models.Model):
 
 
 class News(models.Model):
-    image = models.ImageField(upload_to="image/news/%Y/%m", verbose_name=u"新闻图片")
-    title = models.CharField(max_length=1024, verbose_name=u"新闻标题", null=False)
-    content = models.CharField(max_length=2048, verbose_name=u"新闻内容", null=False)
-    author = models.CharField(max_length=20, verbose_name=u"新闻作者", null=False)
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    image = models.ImageField(upload_to="image/news/%Y/%m", verbose_name=u"新闻图片", help_text="新闻图片")
+    title = models.CharField(max_length=1024, verbose_name=u"新闻标题", null=False, help_text="新闻标题")
+    content = models.CharField(max_length=2048, verbose_name=u"新闻内容", null=False, help_text="新闻内容")
+    author = models.CharField(max_length=20, verbose_name=u"新闻作者", null=False, help_text="新闻作者")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间", help_text="添加时间")
 
     class Meta:
         verbose_name = "新闻信息"
@@ -93,9 +93,9 @@ class News(models.Model):
 
 
 class Banner(models.Model):
-    index = models.AutoField(primary_key=True, verbose_name=u"顺序")
-    content = models.ForeignKey(News, verbose_name=u"新闻标题", on_delete=models.CASCADE)
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    index = models.AutoField(primary_key=True, verbose_name=u"顺序", help_text="轮播图顺序")
+    content = models.ForeignKey(News, verbose_name=u"新闻标题", on_delete=models.CASCADE, help_text="内容")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间", help_text="添加时间")
 
     class Meta:
         verbose_name = u"轮播图"
