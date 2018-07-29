@@ -1,7 +1,7 @@
 import xadmin
 from xadmin import views
 
-from .models import UserProfile, Base, Banner, News, Staff
+from .models import UserProfile, Base, Banner, News, Staff, VerifyCode
 
 
 class BaseSettings(object):
@@ -35,12 +35,19 @@ class NewsAdmin(object):
 
 
 class StaffAdmin(object):
-    list_display = ['name', 'mobile_phone', 'salary', 'seniority', 'add_time']
+    list_display = ['name', 'mobile', 'salary', 'seniority', 'add_time']
     search_fields = ['name', 'seniority', 'salary']
     list_filter = ['salary', 'seniority', 'add_time']
+
+
+class VerifyCodeAdmin(object):
+    list_display = ['mobile', 'code', 'add_time']
+    search_fields = ['mobile', 'code']
+    list_filter = ['mobile', 'code', 'add_time']
 
 
 xadmin.site.register(Banner, BannerAdmin)
 xadmin.site.register(Base, BaseAdmin)
 xadmin.site.register(News, NewsAdmin)
 xadmin.site.register(Staff, StaffAdmin)
+xadmin.site.register(VerifyCode, VerifyCodeAdmin)

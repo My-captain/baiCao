@@ -1,59 +1,64 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.parsers import JSONParser
-import json
+# ==========================================
+# @Time    : 2018/7/29 9:42
+# @Author  : Mr.Robot
+# @File    : views.py
+# @Project : baiCao
+# ==========================================
+
+from rest_framework import viewsets
+from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.authentication import SessionAuthentication
 
 from .models import Purchase, Favorite, Generation
 from .serializers import PurchaseSerializer, FavoriteSerializer, GenerationSerializer
 
+# 自定义权限认证
+from utils import permissions
+
 # Create your views here.
 
 
-class PurchaseView(APIView):
-    def get(self, request):
-        purchase = Purchase.objects.all()[:10]
-        purchase_serializer = PurchaseSerializer(purchase, many=True)
-        return Response(purchase_serializer.data)
+class PurchaseViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    """
+    用户购买接口
+    """
+    queryset = Purchase.objects.all()
+    permission_classes = (IsAuthenticated, permissions.IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = PurchaseSerializer
 
-    def post(self, request):
-        purchases = request.POST["purchases"]
-        print(purchases)
-        serializer = PurchaseSerializer(data=json.loads(purchases))
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+    # 该方法只能获取到当前用户的购买记录
+    def get_queryset(self):
+        return Purchase.objects.filter(customer=self.request.user)
 
 
-class GenerationView(APIView):
-    def get(self, request):
-        generation = Generation.objects.all()[:10]
-        generation_serializer = GenerationSerializer(generation, many=True)
-        return Response(generation_serializer.data)
+class GenerationView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    """
+    用户代种接口
+    """
+    queryset = Generation.objects.all()
+    permission_classes = (IsAuthenticated, permissions.IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = GenerationSerializer
 
-    def post(self, request):
-        generation = request.POST["generation"]
-        print(generation)
-        serializer = GenerationSerializer(data=json.loads(generation))
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.data, status=400)
+    # 该方法只能获取到当前用户的购买记录
+    def get_queryset(self):
+        return Generation.objects.filter(customer=self.request.user)
 
 
-class FavoriteListView(APIView):
-    def get(self, request):
-        favorite = Favorite.objects.all()[:10]
-        favorite_serializer = FavoriteSerializer(favorite, many=True)
-        return Response(favorite_serializer.data)
+class FavoriteView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    """
+    用户收藏接口
+    """
+    queryset = Favorite.objects.all()
+    permission_classes = (IsAuthenticated, permissions.IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = FavoriteSerializer
 
-    def post(self, request):
-        favorite = request.POST["favorite"]
-        print(favorite)
-        serializer = FavoriteSerializer(data=json.loads(favorite))
-        if serializer.is_vaild():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+    # 该方法只能获取到当前用户的购买记录
+    def get_queryset(self):
+        return Favorite.objects.filter(customer=self.request.user)
+
 

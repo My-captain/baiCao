@@ -9,6 +9,8 @@ from aliyunsdkcore.http import format_type as FT
 
 import baiCao.settings as settings
 
+import json
+
 # 注意：不要更改
 REGION = "cn-hangzhou"
 PRODUCT_NAME = "Dysmsapi"
@@ -44,12 +46,12 @@ def send_sms(business_id, phone_numbers, sign_name, template_code, template_para
     return smsResponse
 
 
-if __name__ == '__main__':
+def aliyun_send_sms(code, mobile):
     __business_id = uuid.uuid1()
-    params = "{\"code\":\"12345\"}"
-    # params = u'{"name":"wqb","code":"12345678","address":"bz","phone":"13000000000"}'
-    print(send_sms(__business_id, "15105185056", "刘震", "SMS_140550297", params))
-
-
-
-
+    params = "{\"code\":\"" + code + "\"}"
+    # params = "{\"code\":\"12345\"}"
+    response_dict = send_sms(__business_id, mobile, settings.SMS_SIGNATURE, settings.SMS_TEMPLATE_CODE, params)
+    response_dict = str(response_dict, encoding='utf-8')
+    print("发送回执：" + response_dict + "\n发送内容:" + "code:" + code + "\tmobile" + mobile)
+    response_dict = json.loads(response_dict)
+    return response_dict

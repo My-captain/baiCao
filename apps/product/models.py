@@ -2,6 +2,7 @@ from django.db import models
 from users.models import Base
 
 from datetime import datetime
+from django.utils import timezone
 
 # Create your models here.
 
@@ -15,7 +16,7 @@ class Goods(models.Model):
     base = models.ForeignKey(Base, null=True, verbose_name=u"所属基地", on_delete=models.CASCADE)
     desc = models.CharField(max_length=200, verbose_name=u"商品简介")
     img = models.ImageField(upload_to="image/goods/%Y/%m", verbose_name=u"商品图片")
-    add_time = models.DateField(default=datetime.today(), verbose_name=u"添加时间")
+    add_time = models.DateField(default=timezone.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = "商品信息"
@@ -30,12 +31,12 @@ class Plants(models.Model):
     name = models.CharField(max_length=50, verbose_name=u"植物名称", null=False)
     classes = models.CharField(max_length=50, verbose_name=u"门纲科目", null=False)
     specification = models.CharField(max_length=50, verbose_name=u"规格", null=False)
-    phase = models.CharField(max_length=50, verbose_name=u"花期", null=False)
-    parts = models.CharField(max_length=50, verbose_name=u"药用部位", null=False)
+    flowering = models.CharField(max_length=50, verbose_name=u"花期", null=False)
+    medicinal_parts = models.CharField(max_length=50, verbose_name=u"药用部位", null=False)
     flavour = models.CharField(max_length=50, verbose_name=u"性味", null=False)
     function = models.CharField(max_length=50, verbose_name=u"功能", null=False)
     image = models.ImageField(upload_to="image/plants/%Y/%m", verbose_name=u"植物图片")
-    add_time = models.DateField(default=datetime.today(), verbose_name=u"添加时间")
+    add_time = models.DateField(default=timezone.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = "植物信息"

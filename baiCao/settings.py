@@ -30,7 +30,7 @@ SECRET_KEY = 'dy(c8t6!q*62@01wf8x7j1)l!o=urp7vtzzu!f12b#z*qruf=a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # 第三方app
     'xadmin',
     'rest_framework',
+    'django_filters',
     # xadmin 依赖
     'crispy_forms',
     # drf
@@ -149,19 +150,24 @@ AUTHENTICATION_BACKENDS = (
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/image/'
+STATIC_URL = '/static/'
+
+MEDIA_URL = "/image/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "image")
 
 
 # 傻逼 阿里云 短信服务的配置项
 ACCESS_KEY_ID = "LTAIh9Ny8m0itvoT"
 ACCESS_KEY_SECRET = "WjpjVoUj4vZUZqAV2yAZUuK0R91c30"
+SMS_SIGNATURE = "刘震"
+SMS_TEMPLATE_CODE = "SMS_140550297"
 
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    )
+    ),
 }
 
 JWT_AUTH = {
@@ -170,3 +176,6 @@ JWT_AUTH = {
     # header_prefix
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
+
+# 匹配mobile
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"

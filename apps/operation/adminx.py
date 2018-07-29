@@ -16,9 +16,9 @@ class PurchaseAdmin(object):
 
 
 class FavoriteAdmin(object):
-    list_display = ['user', 'good', 'add_time']
-    search_fields = ['user', 'good']
-    list_filter = ['user', 'good', 'add_time']
+    list_display = ['customer', 'good', 'add_time']
+    search_fields = ['customer', 'good']
+    list_filter = ['customer', 'good', 'add_time']
 
 
 xadmin.site.register(Generation, GenerationAdmin)

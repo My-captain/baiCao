@@ -13,8 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include, re_path
+# 开发环境下处理静态文件请求
+from django.views.static import serve
+from baiCao import settings
+from django.urls import path, re_path
+
+from django.conf.urls import url, include
 
 # django文档
 from rest_framework.documentation import include_docs_urls
@@ -22,7 +26,7 @@ from rest_framework.documentation import include_docs_urls
 import xadmin
 
 # views
-# from users.views import LoginView
+from users.views import SmsCodeViewset, UserViewset
 
 # drf自带的token验证
 from rest_framework.authtoken import views
@@ -31,23 +35,23 @@ from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 
 # urls
+from rest_framework.routers import DefaultRouter
 
+router = DefaultRouter()
+
+router.register(r'codes', SmsCodeViewset, base_name="codes")
+router.register(r'users', UserViewset, base_name="users")
 
 urlpatterns = [
-    path('xadmin/', xadmin.site.urls),
+    url(r'^', include(router.urls)),
 
-    # 登录与注册
-    # re_path('^login/$', LoginView.as_view(), name="login"),
-    # re_path('^register/$', RegisterView.as_view(), name="register"),
+    path('xadmin/', xadmin.site.urls),
 
     # product url
     path('product/', include('product.urls', namespace='product')),
 
     # operation url
     path('operation/', include('operation.urls', namespace='operation')),
-
-    # users url
-    path('users/', include('users.urls', namespace='users')),
 
     # rest_frame_work
     re_path('docs/', include_docs_urls("baiCao")),
@@ -57,5 +61,8 @@ urlpatterns = [
     re_path('api-token-auth/', views.obtain_auth_token),
 
     # jwt auth_token
-    re_path(r'jwt_auth/', obtain_jwt_token)
+    re_path(r'login/', obtain_jwt_token),
+
+    # 配置上传文件的访问处理函数
+    re_path(r'image/(?P<path>.*)$', serve, {"document_root": settings.MEDIA_ROOT}),
 ]
