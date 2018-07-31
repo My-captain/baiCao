@@ -58,7 +58,7 @@ urlpatterns = [
     re_path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     # drf auth_token
-    re_path('api-token-auth/', views.obtain_auth_token),
+    # re_path('api-token-auth/', views.obtain_auth_token),
 
     # jwt auth_token
     re_path(r'login/', obtain_jwt_token),

@@ -151,6 +151,7 @@ AUTHENTICATION_BACKENDS = (
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static_collections/'
 
 MEDIA_URL = "/image/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "image")
